@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أداة مشخص الأعراض للمستشفيات - ويب طب</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts - Cairo Arabic Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* WebTeb Official Colors from https://www.webteb.com */
+            --webteb-blue: #1a7bb8;      /* Primary blue - matches WebTeb logo and buttons */
+            --webteb-dark-blue: #0d5a8a;  /* Darker blue for hover states */
+            --webteb-light-blue: #e6f2f8; /* Light blue background */
+            --webteb-dark: #2c3e50;      /* Dark text color */
+            --webteb-gray: #6c757d;      /* Gray text */
+            --webteb-light-gray: #f8f9fa; /* Light background */
+            --webteb-border: #dee2e6;    /* Border color */
+            --webteb-problem: #6c757d;   /* Gray for problem cards */
+        }
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            color: var(--webteb-dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            color: var(--webteb-dark);
+        }
+        
+        /* Navigation - Exact WebTeb header style */
+        .navbar {
+            background-color: white !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 10px 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--webteb-blue) !important;
+            font-size: 1.5rem;
+        }
+        
+        .navbar-brand i {
+            color: var(--webteb-blue);
+        }
+        
+        .nav-link {
+            color: var(--webteb-dark) !important;
+            font-weight: 500;
+            margin: 0 8px;
+            font-size: 0.95rem;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--webteb-blue) !important;
+        }
+        
+        /* Hero Section - WebTeb exact style */
+        .hero-section {
+            background-color: white;
+            padding: 120px 0 80px;
+            border-bottom: 1px solid var(--webteb-border);
+        }
+        
+        .hero-eyebrow {
+            color: var(--webteb-blue);
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            display: inline-block;
+            letter-spacing: 0.5px;
+        }
+        
+        .hero-title {
+            font-size: 2.8rem;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: var(--webteb-dark);
+        }
+        
+        .hero-title span {
+            color: var(--webteb-blue);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--webteb-gray);
+            margin-bottom: 35px;
+        }
+        
+        /* WebTeb Style Primary Button */
+        .primary-cta {
+            background-color: var(--webteb-blue);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .primary-cta:hover {
+            background-color: var(--webteb-dark-blue);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(26, 123, 184, 0.2);
+        }
+        
+        /* Stats Section - WebTeb clean style */
+        .stats-section {
+            padding: 70px 0;
+            background-color: var(--webteb-light-gray);
+            border-bottom: 1px solid var(--webteb-border);
+        }
+        
+        .stat-box {
+            text-align: center;
+            padding: 25px 15px;
+            background-color: white;
+            border-radius: 8px;
+            border: 1px solid var(--webteb-border);
+            transition: all 0.3s;
+        }
+        
+        .stat-box:hover {
+            border-color: var(--webteb-blue);
+        }
+        
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--webteb-blue);
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--webteb-gray);
+        }
+        
+        /* Story Section - Using only WebTeb blue and gray */
+        .story-section {
+            padding: 100px 0;
+            background-color: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+            color: var(--webteb-dark);
+        }
+        
+        .section-title::after {
+            content: "";
+            position: absolute;
+            width: 60px;
+            height: 3px;
+            background-color: var(--webteb-blue);
+            bottom: -15px;
+            right: 50%;
+            transform: translateX(50%);
+        }
+        
+        /* Problem Cards - Gray theme */
+        .problem-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            border: 1px solid var(--webteb-border);
+            height: 100%;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .problem-card::before {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background-color: var(--webteb-gray); /* Gray for problems */
+        }
+        
+        .problem-card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-color: var(--webteb-gray);
+        }
+        
+        /* Solution Cards - Blue theme */
+        .solution-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            border: 1px solid var(--webteb-border);
+            height: 100%;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .solution-card::before {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background-color: var(--webteb-blue); /* Blue for solutions */
+        }
+        
+        .solution-card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-color: var(--webteb-blue);
+        }
+        
+        .problem-icon, .solution-icon {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .problem-icon {
+            color: var(--webteb-gray); /* Gray icons for problems */
+        }
+        
+        .solution-icon {
+            color: var(--webteb-blue); /* Blue icons for solutions */
+        }
+        
+        /* Features Section */
+        .features-section {
+            padding: 100px 0;
+            background-color: var(--webteb-light-gray);
+            border-top: 1px solid var(--webteb-border);
+        }
+        
+        .feature-box {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px 20px;
+            border: 1px solid var(--webteb-border);
+            height: 100%;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .feature-box:hover {
+            border-color: var(--webteb-blue);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--webteb-blue);
+            margin-bottom: 20px;
+        }
+        
+        /* Benefits Section */
+        .benefits-section {
+            padding: 100px 0;
+            background-color: white;
+        }
+        
+        .benefit-card {
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: white;
+            margin-bottom: 30px;
+            height: 100%;
+            border: 1px solid var(--webteb-border);
+            transition: all 0.3s;
+        }
+        
+        .benefit-card:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .benefit-header {
+            background-color: var(--webteb-blue);
+            color: white;
+            padding: 18px;
+            text-align: center;
+        }
+        
+        .benefit-body {
+            padding: 25px;
+            background-color: white;
+        }
+        
+        /* CTA Section - WebTeb style */
+        .cta-section {
+            padding: 100px 0;
+            background-color: var(--webteb-blue);
+            color: white;
+            text-align: center;
+        }
+        
+        .cta-title {
+            color: white;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .cta-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+        
+        .secondary-cta {
+            background-color: white;
+            color: var(--webteb-blue);
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .secondary-cta:hover {
+            background-color: #f8f9fa;
+            color: var(--webteb-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* FAQ Section - WebTeb style */
+        .faq-section {
+            padding: 100px 0;
+            background-color: var(--webteb-light-gray);
+            border-top: 1px solid var(--webteb-border);
+            border-bottom: 1px solid var(--webteb-border);
+        }
+        
+        .faq-item {
+            background-color: white;
+            border: 1px solid var(--webteb-border);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-item:hover {
+            border-color: var(--webteb-blue);
+        }
+        
+        .faq-item.active {
+            border-color: var(--webteb-blue);
+            box-shadow: 0 5px 15px rgba(26, 123, 184, 0.1);
+        }
+        
+        .faq-question {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--webteb-dark);
+            background-color: white;
+            transition: all 0.3s;
+        }
+        
+        .faq-question:hover {
+            background-color: var(--webteb-light-blue);
+        }
+        
+        .faq-question i {
+            color: var(--webteb-blue);
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+        
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: var(--webteb-gray);
+            background-color: white;
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 0 20px 20px 20px;
+            max-height: 500px;
+        }
+        
+        /* Chatbot Styles - WebTeb themed */
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .chatbot-toggle {
+            width: 60px;
+            height: 60px;
+            background-color: var(--webteb-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(26, 123, 184, 0.3);
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .chatbot-toggle:hover {
+            background-color: var(--webteb-dark-blue);
+            transform: scale(1.05);
+        }
+        
+        .chatbot-toggle i {
+            font-size: 1.5rem;
+        }
+        
+        .chatbot-window {
+            width: 350px;
+            height: 500px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            border: 1px solid var(--webteb-border);
+            margin-bottom: 15px;
+        }
+        
+        .chatbot-window.active {
+            display: flex;
+        }
+        
+        .chatbot-header {
+            background-color: var(--webteb-blue);
+            color: white;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .chatbot-header h5 {
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .chatbot-header button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        
+        .chatbot-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background-color: #fafafa;
+        }
+        
+        .chat-message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.5;
+            word-wrap: break-word;
+            font-size: 0.95rem;
+        }
+        
+        .bot-message {
+            background-color: white;
+            border: 1px solid var(--webteb-border);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+            color: var(--webteb-dark);
+        }
+        
+        .user-message {
+            background-color: var(--webteb-blue);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .chatbot-input {
+            padding: 15px;
+            border-top: 1px solid var(--webteb-border);
+            background-color: white;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chatbot-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid var(--webteb-border);
+            border-radius: 25px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border 0.3s;
+        }
+        
+        .chatbot-input input:focus {
+            border-color: var(--webteb-blue);
+        }
+        
+        .chatbot-input button {
+            background-color: var(--webteb-blue);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .chatbot-input button:hover {
+            background-color: var(--webteb-dark-blue);
+        }
+        
+        .quick-questions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+            padding: 0 5px;
+        }
+        
+        .quick-question {
+            background-color: var(--webteb-light-blue);
+            border: 1px solid rgba(26, 123, 184, 0.2);
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--webteb-blue);
+        }
+        
+        .quick-question:hover {
+            background-color: rgba(26, 123, 184, 0.1);
+        }
+        
+        /* Footer - WebTeb footer style */
+        .footer {
+            background-color: #2c3e50;
+            color: #b0b0b0;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-title {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links a {
+            color: #b0b0b0;
+            text-decoration: none;
+                    display: block;
+            margin-bottom: 8px;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid #3a506b;
+            color: #8a8a8a;
+            font-size: 0.85rem;
+        }
+        
+        /* WebTeb Specific Styling */
+        .webteb-accent {
+            color: var(--webteb-blue);
+        }
+        
+        .webteb-accent-bg {
+            background-color: var(--webteb-blue);
+            color: white;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .stat-number {
+                font-size: 1.8rem;
+            }
+            
+            .cta-title {
+                font-size: 1.8rem;
+            }
+            
+            .chatbot-container {
+                left: 15px;
+                bottom: 15px;
+            }
+            
+            .chatbot-window {
+                width: 320px;
+                height: 450px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .chatbot-window {
+                width: calc(100vw - 30px);
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-stethoscope me-2"></i>ويب طب للمؤسسات
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">المميزات</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#story">القصة</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#faq">الأسئلة الشائعة</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#benefits">الفوائد</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#cta">طلب عرض</a>
+                    </li>
+                </ul>
+                <a href="#cta" class="btn primary-cta">اطلب عرضًا خاصًا</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="hero-eyebrow">
+                        <i class="fas fa-brain me-2"></i> الذكاء الاصطناعي في خدمة القطاع الصحي
+                    </div>
+                    <h1 class="hero-title">حوّل موقعك الإلكتروني إلى <span>بوابة ذكية</span> للرعاية الصحية</h1>
+                    <p class="hero-subtitle">
+                        أداة مشخص الأعراض من "ويب طب" – المعتمدة من خبراء هارفارد – تقدم توجيهاً أولياً دقيقاً للمرضى، تخفف العبء عن مراكز الاتصال والطوارئ، وتزيد من الحجوزات المؤهلة في أقسامك الطبية.
+                    </p>
+                    <a href="#cta" class="btn primary-cta">
+                        <i class="fas fa-calendar-check me-2"></i>اطلب عرضًا خاصًا لمستشفاك
+                    </a>
+                </div>
+                <div class="col-lg-6">
+                    <div class="text-center mt-5 mt-lg-0">
+                        <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid var(--webteb-border); display: inline-block;">
+                            <div style="width: 100%; height: 300px; background: linear-gradient(to bottom right, var(--webteb-light-blue), white); border-radius: 6px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(26, 123, 184, 0.2);">
+                                <div style="text-align: center; color: var(--webteb-blue);">
+                                    <!--<i class="fas fa-laptop-medical" style="font-size: 4rem; margin-bottom: 15px;"></i>-->
+                                    <img src="webteb.png" alt="WebTeb Logo" style="width: 120px; margin-bottom: 15px;">
+                                        <!-- AND upload webteb.png with your HTML file -->
+                                    <!--<img src="C:\Users\mohammad\Desktop\Landing_Page\webteb.png" alt="WebTeb Logo" style="width: 120px; margin-bottom: 15px;">-->
+                                    <h5 style="font-weight: 600;">معاينة أداة ويب طب</h5>
+                                    <p style="font-size: 0.9rem; color: var(--webteb-gray); margin-top: 10px;">واجهة سهلة الاستخدام - منطق طبي ذكي</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="stat-box">
+                        <span class="stat-number">500K+</span>
+                        <span class="stat-label">عقدة منطق طبي</span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="stat-box">
+                        <span class="stat-number">136</span>
+                        <span class="stat-label">عرضًا مشمولاً</span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="stat-box">
+                        <span class="stat-number">2,557</span>
+                        <span class="stat-label">سؤال تشخيصي</span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="stat-box">
+                        <span class="stat-number">2,211</span>
+                        <span class="stat-label">نقطة توجيه للحجز</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="story-section" id="story">
+        <div class="container">
+            <h2 class="section-title">هل يعاني نظامك الصحي من هذه التحديات؟</h2>
+            <div class="row">
+                <!-- Problem 1 -->
+                <div class="col-lg-6 mb-4">
+                    <div class="problem-card">
+                        <div class="problem-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h4>ازدحام الطوارئ ومركز الاتصال</h4>
+                        <p>مكالمات وزيارات متكررة لأعراض غير طارئة تستنزف وقت الطواقم الطبية الثمين وتقلل من كفاءة الخدمة للمرضى الذين يحتاجون رعاية عاجلة حقًا.</p>
+                    </div>
+                </div>
+                <!-- Solution 1 -->
+                <div class="col-lg-6 mb-4">
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h4>بوابة رقمية ذكية للفرز الأولي</h4>
+                        <p>أداة تفاعلية تتعامل مع الاستفسارات الأولية، توجه المريض للقسم الصحيح وتصفية الحالات قبل الوصول إليك، مما يحرر طاقمك للتركيز على الرعاية الحرجة.</p>
+                    </div>
+                </div>
+                
+                <!-- Problem 2 -->
+                <div class="col-lg-6 mb-4">
+                    <div class="problem-card">
+                        <div class="problem-icon">
+                            <i class="fas fa-calendar-times"></i>
+                        </div>
+                        <h4>مواعيد غير مناسبة مع تخصص خاطئ</h4>
+                        <p>مرضى يحجزون مواعيد مع أطباء غير مختصين بحالتهم، مما يؤدي إلى إهدار وقت الطبيب والمريض وتأخير التشخيص الصحيح.</p>
+                    </div>
+                </div>
+                <!-- Solution 2 -->
+                <div class="col-lg-6 mb-4">
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <i class="fas fa-directions"></i>
+                        </div>
+                        <h4>توجيه دقيق لأقسام المستشفى</h4>
+                        <p>نظام توجيه ذكي يوجه المريض إلى القسم أو التخصص الطبي الأنسب لحالته، مما يزيد كفاءة الحجوزات ويحسن تجربة المريض.</p>
+                    </div>
+                </div>
+                
+                <!-- Problem 3 -->
+                <div class="col-lg-6 mb-4">
+                    <div class="problem-card">
+                        <div class="problem-icon">
+                            <i class="fas fa-user-injured"></i>
+                        </div>
+                        <h4>ارتباك المريض وضعف الوعي الصحي</h4>
+                        <p>مرضى لا يعرفون الخطوات الصحيحة قبل الزيارة، مما يؤدي إلى استعداد غير كامل وإطالة مدة التشخيص وزيادة القلق.</p>
+                    </div>
+                </div>
+                <!-- Solution 3 -->
+                <div class="col-lg-6 mb-4">
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h4>مكتبة محتوى طبي موثوق</h4>
+                        <p>أكثر من 5,000 صفحة محتوى طبي مبسط تناسب المرضى، ترفع وعيهم الصحي وتجهزهم للزيارة بشكل أفضل.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5">
+                <div class="p-4" style="background-color: var(--webteb-light-gray); border-radius: 8px; max-width: 800px; margin: 0 auto; border: 1px solid var(--webteb-border);">
+                    <h4 class="mb-3" style="color: var(--webteb-blue);">
+                        <i class="fas fa-lightbulb me-2"></i>لا تستهلك مواردك في التوجيه الأولي
+                    </h4>
+                    <p class="mb-0" style="color: var(--webteb-gray);">
+                        ركّز على تقديم الرعاية المتخصصة، ودع التكنولوجيا المتقدمة من ويب طب تتولى عملية التوجيه الذكي والفرز الأولي للمرضى.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <h2 class="section-title">ليست مجرد أداة فحص عادية</h2>
+            <p class="text-center mb-5" style="color: var(--webteb-gray); max-width: 800px; margin: 0 auto;">
+                إنها <span class="webteb-accent" style="font-weight: 600;">منظومة توجيه طبي كاملة</span> مصممة خصيصًا للمؤسسات الصحية
+            </p>
+            
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h4>آلية محادثة ذكية</h4>
+                        <p>لا تقدم الأداة قائمة ثابتة. بل تتحاور مع المستخدم! تبدأ باختيار منطقة الجسم، ثم تطرح أسئلة متتابعة ومتكيفة بناءً على كل إجابة.</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <h4>معتمدة من خبراء هارفارد</h4>
+                        <p>المنطق التشخيصي طور بالتعاون مع خبراء من كلية هارفارد للطب، مما يضمن دقة التوجيه الطبي وسلامة المعلومات.</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h4>قابلة للتخصيص الكامل</h4>
+                        <p>تخصيص كامل للواجهة والألوان وأسئلة المتابعة ونقاط التحويل لتتناسب مع تخصصات مستشفاك وتسميات أقسامك.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+        <div class="container">
+            <h2 class="section-title">الأسئلة الشائعة</h2>
+            <p class="text-center mb-5" style="color: var(--webteb-gray); max-width: 800px; margin: 0 auto;">
+                أجوبة على أكثر الأسئلة شيوعاً حول أداة مشخص الأعراض من ويب طب للمؤسسات الصحية
+            </p>
+            
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="faq-accordion">
+                        <!-- FAQ Item 1 -->
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>ما هي أداة مشخص الأعراض من ويب طب؟</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>أداة مشخص الأعراض هي نظام ذكي للفرز والتوجيه الطبي الأولي، تم تطويره بالتعاون مع خبراء من كلية هارفارد للطب. تقوم الأداة بإجراء محادثة تفاعلية مع المستخدم لتحليل أعراضه وتوجيهه إلى القسم الطبي المناسب داخل مؤسستك الصحية، مع تقديم معلومات طبية موثوقة.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ Item 2 -->
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>هل تحل الأداة محل الطبيب أو التشخيص الطبي؟</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>لا، الأداة لا تحل محل الطبيب أو التشخيص الطبي السريري. إنها أداة توجيه أولي تساعد في فرز الحالات وتوجيه المرضى إلى المكان المناسب، مما يحسن كفاءة الخدمة ويقلل العبء على الطواقم الطبية. التشخيص النهائي يبقى دائماً من صلاحية الطبيب المعالج.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ Item 3 -->
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>ما مدة تنفيذ الأداة في مستشفانا؟</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>مدة التنفيذ تتراوح بين 2-4 أسابيع حسب حجم المؤسسة ومدى التخصيص المطلوب. تشمل العملية تكامل الأداة مع موقعكم الإلكتروني أو تطبيقكم، وتخصيص الواجهة والألوان، وضبط مسارات التوجيه لتتناسب مع أقسام مستشفاكم.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ Item 4 -->
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>هل الأداة متوافقة مع أنظمة الحجوزات الحالية؟</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>نعم، الأداة مصممة للتكامل مع معظم أنظمة الحجوزات الطبية الشائعة. يمكن ربطها بنظام الحجوزات الحالي لمستشفاكم لتوجيه المريض مباشرة إلى صفحة الحجز الخاصة بالقسم المناسب.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ Item 5 -->
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>هل تدعم الأداة اللغة العربية فقط؟</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>الأداة تدعم اللغة العربية بشكل كامل، ويمكن توفيرها باللغة الإنجليزية أيضاً حسب احتياجات مؤسستكم. جميع المحتويات الطبية مكتوبة ومترجمة بدقة عالية لضمان سلامة المعلومة.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ Item 6 -->
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>ما هي تكلفة الاشتراك في الخدمة؟</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>تختلف التكلفة حسب حجم المؤسسة الصحية وعدد الزيارات الشهرية المتوقعة ومستوى التخصيص المطلوب. نقدم عروضاً مرنة تناسب المؤسسات الصغيرة والمتوسطة والكبيرة. يرجى التواصل معنا للحصول على عرض مخصص لمستشفاكم.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits-section" id="benefits">
+        <div class="container">
+            <h2 class="section-title">قيمة مضافة مباشرة تقاس بالأرقام</h2>
+            
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="benefit-card">
+                        <div class="benefit-header">
+                            <h5 class="mb-0"><i class="fas fa-heartbeat me-2"></i>لتحسين التجربة والثقة</h5>
+                        </div>
+                        <div class="benefit-body">
+                            <p><strong>توجيه دقيق للمريض:</strong> وضوح في الخطوة التالية يبني الثقة ويرضي المرضى.</p>
+                            <p><strong>تعليم ووعي:</strong> مكتبة محتوى طبي موثوق ترفع وعي المرضى وتجهزهم للزيارة.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="benefit-card">
+                        <div class="benefit-header">
+                            <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>لتعزيز الكفاءة التشغيلية</h5>
+                        </div>
+                        <div class="benefit-body">
+                            <p><strong>تخفيف الأحمال:</strong> تقليل الضغط على مراكز الاتصال والطوارئ بنسبة تصل إلى 30%.</p>
+                            <p><strong>تكامل سلس:</strong> تعمل مع موقعك أو تطبيقك الحالي خلال أيام قليلة.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="benefit-card">
+                        <div class="benefit-header">
+                            <h5 class="mb-0"><i class="fas fa-handshake me-2"></i>لزيادة العائد الاستثماري</h5>
+                        </div>
+                        <div class="benefit-body">
+                            <p><strong>تحويل مؤهل:</strong> 2,211 فرصة مدمجة لتحويل الزائر إلى مريض محجوز.</p>
+                            <p><strong>استغلال القدرات:</strong> توزيع المرضى على الأقسام بشكل متوازن لزيادة الإشغال.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="cta">
+        <div class="container">
+            <h2 class="cta-title">ابدأ رحلة تحويل نظامك الصحي إلى رقمي</h2>
+            <p class="cta-subtitle">
+                حمّل دليل "التحول الرقمي للتجربة الصحية 2024" مجاناً. يشرح بالتفصيل دراسات حالة وخطط تنفيذ لزيادة كفاءة المستشفيات.
+            </p>
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="p-4" style="background-color: rgba(255, 255, 255, 0.1); border-radius: 8px;">
+                        <form id="contactForm">
+                            <div class="mb-3">
+                                <input type="text" class="form-control" placeholder="اسمك" required>
+                            </div>
+                            <div class="mb-3">
+                                <input type="email" class="form-control" placeholder="بريدك الإلكتروني" required>
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" placeholder="اسم المؤسسة الصحية" required>
+                            </div>
+                            <button type="submit" class="btn secondary-cta w-100">
+                                <i class="fas fa-download me-2"></i>أرسل الدليل المجاني واتصل بي لعرض تجريبي
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-5">
+                <p style="opacity: 0.8; font-size: 0.9rem;">
+                    <i class="fas fa-lock me-2"></i>بياناتك محمية وسرية. لن نشاركها مع أي طرف ثالث.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="footer-title">
+                        <i class="fas fa-stethoscope me-2"></i>ويب طب للمؤسسات
+                    </h5>
+                    <p style="font-size: 0.9rem;">
+                        أداة مشخص الأعراض المتقدمة للمستشفيات والمراكز الطبية. معتمدة من خبراء هارفارد للطب.
+                    </p>
+                </div>
+                
+                <div class="col-lg-2 col-6 mb-4">
+                    <h5 class="footer-title">روابط سريعة</h5>
+                    <div class="footer-links">
+                        <a href="#hero">الرئيسية</a>
+                        <a href="#features">المميزات</a>
+                        <a href="#story">القصة</a>
+                        <a href="#faq">الأسئلة الشائعة</a>
+                        <a href="#benefits">الفوائد</a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-6 mb-4">
+                    <h5 class="footer-title">المعلومات</h5>
+                    <div class="footer-links">
+                        <a href="#">سياسة الخصوصية</a>
+                        <a href="#">شروط الاستخدام</a>
+                        <a href="#faq">الأسئلة الشائعة</a>
+                        <a href="#">اتصل بنا</a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 mb-4">
+                    <h5 class="footer-title">التواصل</h5>
+                    <div style="font-size: 0.9rem;">
+                        <p class="mb-2">
+                            <i class="fas fa-envelope me-2"></i>info@webteb.com
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-phone me-2"></i>+962 6 123 4567
+                        </p>
+                        <div class="mt-3">
+                            <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="text-white me-3"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-white"><i class="fab fa-facebook"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p class="mb-0">© 2024 ويب طب للمؤسسات. جميع الحقوق محفوظة.</p>
+                <p class="mb-0 mt-2" style="font-size: 0.8rem;">
+                    <i class="fas fa-shield-alt me-1"></i>متوافق مع HIPAA/GDPR | استضافة آمنة في الأردن
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chatbot Container -->
+    <div class="chatbot-container">
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <h5><i class="fas fa-robot me-2"></i>مساعد ويب طب</h5>
+                <button id="closeChatbot"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <!-- Bot welcome message -->
+                <div class="chat-message bot-message">
+                    <p>مرحباً! أنا مساعد ويب طب الرقمي. 🤖</p>
+                    <p>يمكنني الإجابة على أسئلتك حول أداة مشخص الأعراض للمستشفيات. كيف يمكنني مساعدتك اليوم؟</p>
+                    
+                    <div class="quick-questions">
+                        <div class="quick-question" data-question="ما هي أداة مشخص الأعراض؟">ما هي أداة مشخص الأعراض؟</div>
+                        <div class="quick-question" data-question="ما هي تكلفة الخدمة؟">ما هي تكلفة الخدمة؟</div>
+                        <div class="quick-question" data-question="كيف تساعد في تقليل العبء على الطوارئ؟">كيف تساعد في تقليل العبء على الطوارئ؟</div>
+                        <div class="quick-question" data-question="هل تدعم اللغة العربية؟">هل تدعم اللغة العربية؟</div>
+                    </div>
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbotInput" placeholder="اكتب سؤالك هنا...">
+                <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+        <button class="chatbot-toggle" id="chatbotToggle">
+            <i class="fas fa-comments"></i>
+        </button>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Form submission handler
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('شكرًا لتواصلك! سنرسل الدليل إلى بريدك الإلكتروني وسنتصل بك قريبًا لعرض تجريبي.');
+            this.reset();
+        });
+        
+        // Navbar background on scroll
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if(window.scrollY > 50) {
+                navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+            } else {
+                navbar.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
+            }
+        });
+        
+        // FAQ Accordion Functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                faqItem.classList.toggle('active');
+            });
+        });
+        
+        // Chatbot Functionality
+        const chatbotToggle = document.getElementById('chatbotToggle');
+        const chatbotWindow = document.getElementById('chatbotWindow');
+        const closeChatbot = document.getElementById('closeChatbot');
+        const sendMessageBtn = document.getElementById('sendMessage');
+        const chatbotInput = document.getElementById('chatbotInput');
+        const chatbotMessages = document.getElementById('chatbotMessages');
+        const quickQuestions = document.querySelectorAll('.quick-question');
+        
+        // Toggle chatbot window
+        chatbotToggle.addEventListener('click', () => {
+            chatbotWindow.classList.toggle('active');
+        });
+        
+        closeChatbot.addEventListener('click', () => {
+            chatbotWindow.classList.remove('active');
+        });
+        
+        // Chatbot responses database
+        const chatbotResponses = {
+            "ما هي أداة مشخص الأعراض؟": "أداة مشخص الأعراض من ويب طب هي نظام ذكي للفرز والتوجيه الطبي الأولي، تم تطويره بالتعاون مع خبراء من كلية هارفارد للطب. تساعد في توجيه المرضى إلى القسم الطبي المناسب وتقليل العبء على مراكز الاتصال والطوارئ.",
+            "ما هي تكلفة الخدمة؟": "تختلف التكلفة حسب حجم المؤسسة الصحية وعدد الزيارات الشهرية المتوقعة. نقدم عروضاً مرنة تناسب المؤسسات الصغيرة والمتوسطة والكبيرة. يرجى تعبئة النموذج وسنتصل بك لتقديم عرض مخصص.",
+            "كيف تساعد في تقليل العبء على الطوارئ؟": "الأداة تتعامل مع الاستفسارات الأولية للمرضى ذوي الأعراض غير الطارئة، وتوجههم إلى العيادات المناسبة بدلاً من الطوارئ، مما يقلل الضغط على الطوارئ بنسبة تصل إلى 30%.",
+            "هل تدعم اللغة العربية؟": "نعم، الأداة تدعم اللغة العربية بشكل كامل، ويمكن توفيرها باللغة الإنجليزية أيضاً حسب احتياجات مؤسستكم. جميع المحتويات الطبية مكتوبة ومترجمة بدقة عالية.",
+            "ما مدة تنفيذ الأداة؟": "مدة التنفيذ تتراوح بين 2-4 أسابيع حسب حجم المؤسسة ومدى التخصيص المطلوب. تشمل العملية تكامل الأداة مع موقعكم الإلكتروني وتخصيص الواجهة ومسارات التوجيه.",
+            "هل الأداة متوافقة مع أنظمة الحجوزات الحالية؟": "نعم، الأداة مصممة للتكامل مع معظم أنظمة الحجوزات الطبية الشائعة. يمكن ربطها بنظام الحجوزات الحالي لمستشفاكم لتوجيه المريض مباشرة إلى صفحة الحجز.",
+            "ما هي مزايا الأداة للمستشفيات؟": "تقدم الأداة عدة مزايا: 1) تخفيف العبء على مراكز الاتصال 2) توجيه دقيق للمرضى 3) زيادة الحجوزات المؤهلة 4) تحسين تجربة المريض 5) مكتبة محتوى طبي موثوق.",
+            "هل الأداة آمنة وملتزمة بالخصوصية؟": "نعم، الأداة متوافقة مع معايير HIPAA وGDPR لحماية البيانات الطبية. نستخدم استضافة آمنة في الأردن ونتعهد بعدم مشاركة بيانات المرضى مع أي طرف ثالث.",
+            "السلام عليكم": "وعليكم السلام ورحمة الله وبركاته! كيف يمكنني مساعدتك اليوم؟",
+            "مرحبا": "مرحباً بك! أنا مساعد ويب طب الرقمي. هل لديك استفسار عن أداة مشخص الأعراض للمستشفيات؟",
+            "شكرا": "العفو! نحن هنا لخدمتك. إذا كان لديك أي استفسار آخر، فلا تتردد في سؤالي.",
+            "وداعا": "مع السلامة! نتمنى لك يوماً سعيداً. يمكنك العودة في أي وقت لمساعدتك."
+        };
+        
+        // Function to add a message to the chat
+        function addMessage(message, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${isUser ? 'user-message' : 'bot-message'}`;
+            messageDiv.innerHTML = `<p>${message}</p>`;
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+        
+        // Function to get bot response
+        function getBotResponse(userMessage) {
+            userMessage = userMessage.trim().toLowerCase();
+            
+            // Check for exact matches
+            for (const [key, value] of Object.entries(chatbotResponses)) {
+                if (userMessage === key.toLowerCase()) {
+                    return value;
+                }
+            }
+            
+            // Check for partial matches
+            if (userMessage.includes('تكلف') || userMessage.includes('سعر') || userMessage.includes('ثمن')) {
+                return chatbotResponses["ما هي تكلفة الخدمة؟"];
+            } else if (userMessage.includes('لغة') || userMessage.includes('عربي')) {
+                return chatbotResponses["هل تدعم اللغة العربية؟"];
+            } else if (userMessage.includes('طوارئ') || userMessage.includes('عبء')) {
+                return chatbotResponses["كيف تساعد في تقليل العبء على الطوارئ؟"];
+            } else if (userMessage.includes('مدة') || userMessage.includes('تنفيذ') || userMessage.includes('وقت')) {
+                return chatbotResponses["ما مدة تنفيذ الأداة؟"];
+            } else if (userMessage.includes('حجز') || userMessage.includes('موعد')) {
+                return chatbotResponses["هل الأداة متوافقة مع أنظمة الحجوزات الحالية؟"];
+            } else if (userMessage.includes('مزايا') || userMessage.includes('فوائد')) {
+                return chatbotResponses["ما هي مزايا الأداة للمستشفيات؟"];
+            } else if (userMessage.includes('أمان') || userMessage.includes('خصوصية') || userMessage.includes('آمن')) {
+                return chatbotResponses["هل الأداة آمنة وملتزمة بالخصوصية؟"];
+            } else {
+                return "شكراً لسؤالك! للأسف لا أملك إجابة دقيقة عن هذا السؤال الآن. يمكنك التواصل مع فريق المبيعات على info@webteb.com أو تعبئة النموذج في الصفحة للحصول على معلومات دقيقة.";
+            }
+        }
+        
+        // Send message function
+        function sendMessage() {
+            const message = chatbotInput.value.trim();
+            if (message === '') return;
+            
+            // Add user message
+            addMessage(message, true);
+            
+            // Clear input
+            chatbotInput.value = '';
+            
+            // Simulate typing delay
+            setTimeout(() => {
+                const response = getBotResponse(message);
+                addMessage(response);
+            }, 500);
+        }
+        
+        // Event listeners for sending messages
+        sendMessageBtn.addEventListener('click', sendMessage);
+        
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Quick question buttons
+        quickQuestions.forEach(button => {
+            button.addEventListener('click', () => {
+                const question = button.getAttribute('data-question');
+                chatbotInput.value = question;
+                sendMessage();
+            });
+        });
+        
+        // Auto open chatbot after 10 seconds
+        setTimeout(() => {
+            if (!chatbotWindow.classList.contains('active')) {
+                chatbotWindow.classList.add('active');
+                addMessage("مرحباً! لاحظت أنك تتصفح موقعنا. هل لديك أي سؤال حول أداة مشخص الأعراض لمستشفاك؟");
+            }
+        }, 10000);
+    </script>
+</body>
+</html>
